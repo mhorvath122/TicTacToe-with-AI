@@ -5,10 +5,17 @@ import tkinter.messagebox
 
 board = [' ' for x in range(9)]
 
+ 
+def resetBoard():
+    global board 
+    board = [' ' for x in range(9)]
+    screen.destroy()
+    main_screen()
     
 
 def spaceIsFree(pos):
     return board[pos] == ' '
+
 
 def isWinner(bo, le):
     return ((bo[0] == le and bo[1] == le and bo[2] == le) or 
@@ -20,11 +27,13 @@ def isWinner(bo, le):
     (bo[2] == le and bo[4] == le and bo[6] == le) or # diagonal
     (bo[0] == le and bo[4] == le and bo[8] == le)) # diagonal
  
+    
 def selectRandom(li):
     ln = len(li) 
     r = random.randrange(0, ln)
     return li[r]
     
+
 def compMove():
     possibleMoves = [x for x, letter in enumerate(board) if letter == ' ']
     
@@ -53,8 +62,6 @@ def compMove():
             move = selectRandom(cornersOpen)
             return move
     
-    
-    
     #Take any edge    
     edgesOpen = []
     for i in possibleMoves:
@@ -66,10 +73,8 @@ def compMove():
         else:    
             move = selectRandom(possibleMoves)
     
-        
     return move
-      
-    
+  
     
 def isBoardFull(board):
     if board.count(' ') > 1:
@@ -80,24 +85,20 @@ def isBoardFull(board):
 
 def main():
         if isBoardFull(board):
-            messagebox.showinfo('Tic-Tac-Toe','Game is a tie! No more spaces left to move.')     
+            messagebox.showinfo('Tic-Tac-Toe','Game is a tie! No more spaces left to move.')
+            resetBoard()
             
-        
-        
         if compTurn:
             if not(isWinner(board, 'X')):
                 move = compMove()
                 drawMove(fields[move], "O", "blue")
             else:
-                tkinter.messagebox.showinfo('Tic-Tac-Toe', 'Sorry, X\'s won this time! Good Job!')    
-            
-        
-           
+                tkinter.messagebox.showinfo('Tic-Tac-Toe', 'Sorry, RED\'s won this time! Good Job!')
+                resetBoard()
+   
         
 def drawMove(field, XO = "X", color = "red"):
-    
-    
-    
+      
     if XO == 'X' and field['bg'] == "green":
         field.config(bg = color)
         j = fields.index(field)
@@ -110,13 +111,15 @@ def drawMove(field, XO = "X", color = "red"):
         board[j] = XO
         field.config(bg = color)
         if isWinner(board, 'O'):
-            messagebox.showinfo('Tic-Tac-Toe', 'Sorry, O\'s won this time!') 
+            messagebox.showinfo('Tic-Tac-Toe', 'Sorry, BLUE\'s won this time!')
+            resetBoard()
         compTurn = False
 
 
  #Gamefield   
 def main_screen(): 
     
+    global screen
     screen = Tk()
     screen.geometry("600x620")
     global fields
@@ -126,8 +129,6 @@ def main_screen():
         fields.append(Button(screen, text = " ",  height = "12", width = "25", borderwidth = 10, bg = "green", command = lambda i=i : [drawMove(fields[i]),main()]))
         fields[i].grid(row = i // 3, column = i % 3 )
 
-
-   
     screen.mainloop()
 
 main_screen()    
