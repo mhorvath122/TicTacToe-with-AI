@@ -1,10 +1,11 @@
 import random
+from tkinter import *
+import tkinter.messagebox
 
 
-board = [' ' for x in range(10)]
+board = [' ' for x in range(9)]
 
-def insertBoard(letter, pos):
-    board[pos] = letter
+    
 
 def spaceIsFree(pos):
     return board[pos] == ' '
@@ -19,40 +20,30 @@ def isWinner(bo, le):
     (bo[2] == le and bo[4] == le and bo[6] == le) or # diagonal
     (bo[0] == le and bo[4] == le and bo[8] == le)) # diagonal
  
-def playerMove():
-    run = True
-    while run:
-        move = input('Please select a postition to place an \'X\' (1-9) ')
-        try:
-            move = int(move)
-            if move > 0 and move < 10:
-                if spaceIsFree(move - 1):
-                    run = False
-                    insertBoard('X', move - 1)
-                else:
-                    print('Sorry, this space is occupied!')
-            else: 
-                print('Please type a number within the range!')
-        except:
-            print('Please type a number')
-
 def selectRandom(li):
     ln = len(li) 
     r = random.randrange(0, ln)
     return li[r]
     
 def compMove():
-    possibleMoves = [x for x, letter in enumerate(board) if letter == ' ' and x != 0]
-    move = -1
+    possibleMoves = [x for x, letter in enumerate(board) if letter == ' ']
     
+    #Check for possible winning move to take or to block opponents winning move
     for let in ['O', 'X']:
         for i in possibleMoves:
             boardCopy = board[:]
             boardCopy[i] = let
-            if isWinner(board, let):
+            if isWinner(boardCopy, let):
                 move = i
                 return move
-            
+    
+    #Try to take the center    
+    if 4 in possibleMoves:
+        move = 4
+        return move
+    
+    
+    #Try to take one of the corners        
     cornersOpen = []
     for i in possibleMoves:
         if i in [0,2,6,8]:
@@ -61,15 +52,14 @@ def compMove():
         if len(cornersOpen) > 0:
             move = selectRandom(cornersOpen)
             return move
-        
-        if 4 in possibleMoves:
-            move = 4
-            return move
-        
-        edgesOpen = []
-        for i in possibleMoves:
-            if i in [0,2,6,8]:
-                edgesOpen.append(i)
+    
+    
+    
+    #Take any edge    
+    edgesOpen = []
+    for i in possibleMoves:
+        if i in [0,2,6,8]:
+            edgesOpen.append(i)
     
         if len(edgesOpen) > 0:
             move = selectRandom(edgesOpen)
@@ -77,7 +67,7 @@ def compMove():
             move = selectRandom(possibleMoves)
     
         
-        return move
+    return move
       
     
     
@@ -87,46 +77,61 @@ def isBoardFull(board):
     else:
         return True
 
-def printBoard():
-    print('  |   |')
-    print(' ' + board[0] + '| ' + board[1] + ' | ' + board[2])
-    print('  |   |')
-    print('-----------')
-    print('  |   |')
-    print(' ' + board[3] + '| ' + board[4] + ' | ' + board[5])
-    print('  |   |')
-    print('-----------')
-    print('  |   |')
-    print(' ' + board[6] + '| ' + board[7] + ' | ' + board[8])
-    print('  |   |')
 
 def main():
-    print('Welcome to Tic Tac Toe')
-    printBoard()
-    
-    while not(isBoardFull(board)):
-        if not(isWinner(board, 'O')):
-            playerMove()
-            printBoard()
-        else:
-            print('Sorry, O\'s won this time!')
-            break
-       
-        if not(isWinner(board, 'X')):
-            move = compMove()
-            if move == -1:
-                print('Tie Game')
-            else:  
-                insertBoard('O', move)
-                print('Computer placed an \'O\' in position', move, ':')
-                printBoard()
-        else:
-            print('Sorry, X\'s won this time! Good Job!')
-            break
+        if isBoardFull(board):
+            messagebox.showinfo('Tic-Tac-Toe','Game is a tie! No more spaces left to move.')     
+            
         
+        
+        if compTurn:
+            if not(isWinner(board, 'X')):
+                move = compMove()
+                drawMove(fields[move], "O", "blue")
+            else:
+                tkinter.messagebox.showinfo('Tic-Tac-Toe', 'Sorry, X\'s won this time! Good Job!')    
+            
+        
+           
+        
+def drawMove(field, XO = "X", color = "red"):
     
-    if isBoardFull(board):
-        print('Tie Game!')
     
-main()    
+    
+    if XO == 'X' and field['bg'] == "green":
+        field.config(bg = color)
+        j = fields.index(field)
+        board[j] = XO
+        global compTurn
+        compTurn = True
+
+    if XO == 'O':  
+        j = fields.index(field)
+        board[j] = XO
+        field.config(bg = color)
+        if isWinner(board, 'O'):
+            messagebox.showinfo('Tic-Tac-Toe', 'Sorry, O\'s won this time!') 
+        compTurn = False
+
+
+ #Gamefield   
+def main_screen(): 
+    
+    screen = Tk()
+    screen.geometry("600x620")
+    global fields
+    fields = []
+    
+    for i in range(0,9):
+        fields.append(Button(screen, text = " ",  height = "12", width = "25", borderwidth = 10, bg = "green", command = lambda i=i : [drawMove(fields[i]),main()]))
+        fields[i].grid(row = i // 3, column = i % 3 )
+
+
+   
+    screen.mainloop()
+
+main_screen()    
+
+
+    
     
