@@ -24,7 +24,7 @@ board = [' ' for x in range(9)]
 Ezt követően következik a képernyő kirajzolása.
 A képernyő 9db gombból áll, amely a lépéseket reprezentálja.
 
-<img src="./images/1.png" width="250" align="middle"> 
+<img src="./images/1.png" width="500" align="middle"> 
 
 ```python
 def main_screen(): 
@@ -114,7 +114,11 @@ def compMove():
 ```
 A program folyamatosan ellenőrzi, hogy nyert-e valaki, vagy elfogytak-e a szabad helyek, így döntetlen-e.
 
-<img src="./images/2.png" width="250" align="middle"> <img src="./images/3.png" width="250" align="middle"> <img src="./images/4.png" width="250" align="middle">
+<img src="./images/2.png" width="500" align="middle"> 
+
+<img src="./images/3.png" width="500" align="middle"> 
+
+<img src="./images/4.png" width="500" align="middle">
 
 ```python
 def isWinner(bo, le):
