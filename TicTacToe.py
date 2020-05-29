@@ -121,6 +121,7 @@ def main_screen():
     
     global screen
     screen = Tk()
+    screen.title('Tic-Tac-Toe')
     screen.geometry("600x620")
     global fields
     fields = []
