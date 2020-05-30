@@ -68,8 +68,6 @@ def drawMove(field, XO = "X", color = "red"):
 ### A számítógép lépése
 
 A számítógép egy egyszerú algoritmus alapján dönti el, hogy hova szeretne lépni. Először megnézi, hogy van-e olyan mező, ahol ő tud nyerni, majd van-e olyan mező ahol a játékos tud nyerni. Ha van akkor ide rak, ha nincs akkor, ha szabad a középső mező, akkor azt választja, ha nem szabad, akkor a szélére probál rakni, ha az se szabad, akkor a sarokra.
-Először a sarokra rakás és a szélére rakás sorendjét fordítva próbáltam, akkor még lehetett nyerni ellene, így már döntetlen a legjobb opció.
-
 
 ```python
 def compMove():
