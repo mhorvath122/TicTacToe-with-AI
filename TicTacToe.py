@@ -13,10 +13,6 @@ def resetBoard():
     main_screen()
     
 
-def spaceIsFree(pos):
-    return board[pos] == ' '
-
-
 def isWinner(bo, le):
     return ((bo[0] == le and bo[1] == le and bo[2] == le) or 
     (bo[3] == le and bo[4] == le and bo[5] == le) or # across the middle
@@ -51,6 +47,19 @@ def compMove():
         move = 4
         return move
     
+     
+    #Take any edge    
+    edgesOpen = []
+    for i in possibleMoves:
+        if i in [1,3,5,7]:
+            edgesOpen.append(i)
+    
+        if len(edgesOpen) > 0:
+            move = selectRandom(edgesOpen)
+            return move
+        else:    
+            move = selectRandom(possibleMoves)
+            return move
     
     #Try to take one of the corners        
     cornersOpen = []
@@ -61,19 +70,7 @@ def compMove():
         if len(cornersOpen) > 0:
             move = selectRandom(cornersOpen)
             return move
-    
-    #Take any edge    
-    edgesOpen = []
-    for i in possibleMoves:
-        if i in [0,2,6,8]:
-            edgesOpen.append(i)
-    
-        if len(edgesOpen) > 0:
-            move = selectRandom(edgesOpen)
-        else:    
-            move = selectRandom(possibleMoves)
-    
-    return move
+   
   
     
 def isBoardFull(board):
