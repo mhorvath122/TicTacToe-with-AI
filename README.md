@@ -67,7 +67,8 @@ def drawMove(field, XO = "X", color = "red"):
 ```
 ### A számítógép lépése
 
-A számítógép egy egyszerú algoritmus alapján dönti el, hogy hova szeretne lépni. Először megnézi, hogy van-e olyan mező, ahol ő tud nyerni, majd van-e olyan mező ahol a játékos tud nyerni. Ha van akkor ide rak, ha nincs akkor ha szabad a középső mező, akkor azt választja, ha nem szabad, akkor sarokra probál rakni, ha az se szabad, akkor a szélére.
+A számítógép egy egyszerú algoritmus alapján dönti el, hogy hova szeretne lépni. Először megnézi, hogy van-e olyan mező, ahol ő tud nyerni, majd van-e olyan mező ahol a játékos tud nyerni. Ha van akkor ide rak, ha nincs akkor, ha szabad a középső mező, akkor azt választja, ha nem szabad, akkor a szélére probál rakni, ha az se szabad, akkor a sarokra.
+Először a sarokra rakás és a szélére rakás sorendjét fordítva próbáltam, akkor még lehetett nyerni ellene, így már döntetlen a legjobb opció.
 
 
 ```python
@@ -88,6 +89,19 @@ def compMove():
         move = 4
         return move
     
+     
+    #Take any edge    
+    edgesOpen = []
+    for i in possibleMoves:
+        if i in [1,3,5,7]:
+            edgesOpen.append(i)
+    
+        if len(edgesOpen) > 0:
+            move = selectRandom(edgesOpen)
+            return move
+        else:    
+            move = selectRandom(possibleMoves)
+            return move
     
     #Try to take one of the corners        
     cornersOpen = []
@@ -98,19 +112,14 @@ def compMove():
         if len(cornersOpen) > 0:
             move = selectRandom(cornersOpen)
             return move
+   
+  
     
-    #Take any edge    
-    edgesOpen = []
-    for i in possibleMoves:
-        if i in [0,2,6,8]:
-            edgesOpen.append(i)
-    
-        if len(edgesOpen) > 0:
-            move = selectRandom(edgesOpen)
-        else:    
-            move = selectRandom(possibleMoves)
-    
-    return move
+def isBoardFull(board):
+    if board.count(' ') > 1:
+        return False
+    else:
+        return True
 ```
 A program folyamatosan ellenőrzi, hogy nyert-e valaki, vagy elfogytak-e a szabad helyek, így döntetlen-e.
 
